@@ -1,0 +1,111 @@
+#!/bin/bash
+### Grupo: SO-TI-13
+### Aluno 1: Guilherme Soares (fc62372)
+### Aluno 2: Duarte Soares (fc62371)
+### Aluno 3: Vitoria Correia (fc62211)
+PYTHON="python3" # You may modify this variable if necessary
+PROGRAM="pword.py" # Do not modify this variable
+
+
+# TO-DO: Validate the number of arguments before calling Python (See TP02)
+
+if [ $# -eq 0 ]; then
+    echo "Error: no arguments were provided."
+    echo "Correct usage: ./pword [-m c|l|i] [-p n] [-i s] [-d f] -w word {files}"
+    exit 1 # Exit code 1 due to error...
+fi
+
+declare -A seen_options #array of seen options
+
+# Argument validation part2
+# Set default values for options
+mode="c"
+parallel="1"
+word=""
+interval="3"
+log_file="stdout"
+
+# Use getopts to process options
+while getopts ":m:p:i:d:w:" opt; do
+
+    # Check if the option has already been processed
+    if [[ -n "${seen_options[$opt]}" ]]; then
+        echo "Error: Option -$opt is provided multiple times."
+        exit 1
+    fi
+    # Mark the option as seen
+    seen_options[$opt]=1 #1 == true 0 == false
+
+    case $opt in
+        m)
+            if [[ "$OPTARG" =~ ^(c|l|i)$ ]]; then
+                mode="$OPTARG"
+            else
+                echo "Error: Invalid option for -m. Use 'c', 'l', or 'i'."
+                exit 1
+            fi
+            ;; # Equivalent to 'break' in Python or Java switch-case
+        p)
+            if [[ "$OPTARG" =~ ^[0-9]+$ ]]; then
+                parallel="$OPTARG"
+            else
+                echo "Error: The value for -p must be an integer."
+                exit 1
+            fi
+            ;;
+        i)
+        if [[ "$OPTARG" =~ ^-?[0-9]+$ || "$OPTARG" =~ ^-?[0-9]*\.?[0-9]+$ ]]; then
+            interval="$OPTARG"
+        else
+            echo "$OPTARG is not a number."
+        fi
+        ;;
+        d)
+        #VERIFY IF NEEDED
+#        if [ ! -f "${OPTARG}" ]; then # -f checks if the file exists
+#            echo "Error: The file ${OPTARG} was not found."
+#            exit 1
+#        fi
+            log_file="$OPTARG"
+        ;;
+        w)
+            word="$OPTARG"
+            ;;
+        \?)
+            echo "Error: Invalid option -$OPTARG"
+            exit 1
+            ;;
+        :)
+            echo "Error: Option -$OPTARG requires an argument."
+            exit 1
+            ;;
+    esac # End case
+done
+
+# Remove processed options from the list of arguments
+shift $((OPTIND -1))
+
+# TO-DO: Verify that the file $PROGRAM exists before calling it (See TP02)
+
+if [ ! -f "${PROGRAM}" ]; then # -f checks if the file exists
+    echo "Error: The file ${PROGRAM} was not found."
+    exit 1
+fi
+
+
+#verify if word exists
+
+if [ -z "$word" ]; then
+    echo "Error: No 'word' was provided."
+    echo "Correct usage: ./pword [-m c|l|i] [-p n] [-i s] [-d f] -w word {files}"
+    exit 1
+fi
+# Verify if any files were provided as arguments
+
+if [ $# -eq 0 ]; then
+    echo "Error: no file was provided."
+    echo "Correct usage: ./pword [-m c|l|i] [-p n] -w word {files}"
+    exit 1 # Exit code 1 due to error...
+fi
+
+${PYTHON} ${PROGRAM} -m "${mode}" -p "${parallel}" -i "${interval}" -d "${log_file}" -w "${word}" "$@"
