@@ -10,9 +10,9 @@
 4) ./pword -p 2 -i 1 -w palavra testFiles/file.txt 
 5) ./pword -m c -i 1 -d testLog.log  -w palavra testFiles/file1.txt testFiles/file2.txt
 
-### Limitações da implementação:
-- ...
-- ...
+### Tempo de registro de log
+- se não for dado -i, o valor será 3 de padrão, se o valor for dado será atualizado consoante os dados, ou seja:
+  - -i 1 -> dará intervalo de 1s
 
 ### Abordagem para a divisão dos ficheiros:
 -Caso haja mais processos filhos que ficheiros lidos,
