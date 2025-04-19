@@ -1,7 +1,7 @@
 ### Grupo: SO-TI-13
-# Aluno 1: Guilherme Soares (fc62372)
-# Aluno 2: Duarte Soares (fc62371)
-# Aluno 3: Vitória Correia (fc62211)
+# Aluno 1: Guilherme Soares 
+# Aluno 2: Duarte Soares 
+# Aluno 3: Vitória Correia 
 
 ### Exemplos de comandos para executar o pword :
 1) ./pword -m c -p 2 -d testLog.log -w palavra testFiles/file.txt 
