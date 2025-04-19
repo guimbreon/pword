@@ -1,3 +1,8 @@
+# pword Project
+
+This README is also available in English. [Click here](README.md)
+
+---
 ### Grupo: SO-TI-13
 # Aluno 1: Guilherme Soares 
 # Aluno 2: Duarte Soares 
